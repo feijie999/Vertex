@@ -91,7 +91,7 @@ namespace Transfer.Client
                 transferWatch.Stop();
                 Console.WriteLine(
                     $"{times * accountCount}The transfer is completed, taking: {transferWatch.ElapsedMilliseconds}ms");
-                await Task.Delay(500);
+                await Task.Delay(2000);
                 foreach (var account in Enumerable.Range(0, accountCount))
                 {
                     Console.WriteLine($"The balance of account {account} is{await client.GetGrain<IAccount>(account).GetBalance()}");
@@ -152,7 +152,7 @@ namespace Transfer.Client
                 transferWatch.Stop();
                 Console.WriteLine(
                     $"{times * accountCount}The transfer is completed, taking: {transferWatch.ElapsedMilliseconds}ms");
-                await Task.Delay(500);
+                await Task.Delay(2000);
                 foreach (var account in Enumerable.Range(0, accountCount))
                 {
                     Console.WriteLine($"The balance of account {account} is{await client.GetGrain<IDTxAccount>(account).GetBalance()}");

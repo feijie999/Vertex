@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+    <ItemGroup>
+        <Folder Include="Events\" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Vertex.Abstractions\Vertex.Abstractions.csproj" />
+    </ItemGroup>
+</Project>

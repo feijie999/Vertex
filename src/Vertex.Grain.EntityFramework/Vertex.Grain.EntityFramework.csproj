@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+    <ItemGroup>
+        <ProjectReference Include="..\Vertex.Runtime\Vertex.Runtime.csproj" />
+        <ProjectReference Include="..\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="5.0.0" />
+        <PackageReference Include="AutoMapper" VersionOverride="10.1.1" />
+    </ItemGroup>
+</Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions;
@@ -19,23 +20,22 @@ namespace Vertex.Grain.EntityFramework
     {
         protected IMapper Mapper { get; private set; }
 
+        protected abstract DbContext GetDbContext();
+
         protected override async ValueTask CreateSnapshot()
         {
-            //using (var repository = ServiceProvider.GetService<IGrainRepository<TEntityType, TPrimaryKey>>())
-            //{
-            //    var entity = await repository.FirstOrDefaultAsync(GrainId);
-            //    if (entity != null)
-            //    {
-            //        Snapshot = new Snapshot<TPrimaryKey, TSnapshotType>(GrainId)
-            //        {
-            //            State = Mapper.Map<TSnapshotType>(entity)
-            //        };
-            //    }
-            //    else
-            //    {
-            //        await base.CreateSnapshot();
-            //    }
-            //}
+            using (var dbContext = this.GetDbContext())
+            {
+                var entity = await dbContext.FindAsync<TEntityType>(this.ActorId);
+                if (entity != null)
+                {
+                    this.Snapshot.Data = this.ServiceProvider.GetService<IMapper>().Map<TEntityType, TSnapshotType>(entity);
+                }
+                else
+                {
+                    await base.CreateSnapshot();
+                }
+            }
         }
 
         protected override ValueTask DependencyInjection()

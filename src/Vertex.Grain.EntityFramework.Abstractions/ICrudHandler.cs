@@ -1,13 +1,14 @@
 ﻿using System;
+using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions.Events;
 using Vertext.Abstractions.Event;
 
 namespace Vertex.Grain.EntityFramework.Abstractions
 {
-    public interface ICrudHandle<TPrimaryKey, TSnapshot>
-        where TSnapshot : class, new()
+    public interface ICrudHandler<TPrimaryKey, TSnapshot>
+        where TSnapshot : class, ISnapshot, new()
     {
-        void Apply(TSnapshot snapshot, IEvent evt);
+        void Apply(SnapshotUnit<TPrimaryKey, TSnapshot> snapshotBox, EventUnit<TPrimaryKey> eventBox);
 
         void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingSnapshotEvent<TSnapshot> evt);
     }

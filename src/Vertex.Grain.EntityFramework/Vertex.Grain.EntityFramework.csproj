@@ -7,6 +7,6 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="5.0.0" />
-        <PackageReference Include="AutoMapper" VersionOverride="10.1.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" VersionOverride="8.1.0" />
     </ItemGroup>
 </Project>

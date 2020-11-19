@@ -10,17 +10,18 @@ using Vertex.Runtime.Actor;
 
 namespace Vertex.Grain.EntityFramework
 {
-    public abstract class CrudGrain<TPrimaryKey, TSnapshotType, TEntityType, TSnapshotDto> :
+    public abstract class CrudGrain<TPrimaryKey, TSnapshotType, TEntityType, TSnapshotDto, TDbContext> :
             VertexActor<TPrimaryKey, TSnapshotType>,
             ICrudGrain<TSnapshotDto>
             where TSnapshotType : class, ISnapshot, TEntityType, new()
             where TEntityType : class, new()
             where TSnapshotDto : class, new()
             where TPrimaryKey : new()
+            where TDbContext : DbContext
     {
         protected IMapper Mapper { get; private set; }
 
-        protected abstract DbContext GetDbContext();
+        protected abstract TDbContext GetDbContext();
 
         protected override async ValueTask CreateSnapshot()
         {

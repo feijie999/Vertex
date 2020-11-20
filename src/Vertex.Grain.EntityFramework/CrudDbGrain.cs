@@ -18,7 +18,10 @@ namespace Vertex.Grain.EntityFramework
         protected ICrudHandler<TPrimaryKey, TSnapshot> crudHandle;
         protected IMapper mapper;
 
-        protected abstract TDbContext GetDbContext();
+        protected virtual TDbContext GetDbContext()
+        {
+            return this.ServiceProvider.GetService<TDbContext>();
+        }
 
         protected override ValueTask DependencyInjection()
         {

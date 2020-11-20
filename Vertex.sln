@@ -66,6 +66,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vertex.Grain.EntityFramewor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vertex.Grain.EntityFramework.Abstractions", "src\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj", "{9DF2FD76-C2E8-4A7E-8662-551E3CCE77A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vertex.Crud.Test", "test\Vertex.Crud.Test\Vertex.Crud.Test.csproj", "{7F5D6F00-4956-4D21-B4D8-E435CE88D133}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +166,10 @@ Global
 		{9DF2FD76-C2E8-4A7E-8662-551E3CCE77A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DF2FD76-C2E8-4A7E-8662-551E3CCE77A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DF2FD76-C2E8-4A7E-8662-551E3CCE77A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F5D6F00-4956-4D21-B4D8-E435CE88D133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F5D6F00-4956-4D21-B4D8-E435CE88D133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F5D6F00-4956-4D21-B4D8-E435CE88D133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F5D6F00-4956-4D21-B4D8-E435CE88D133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{E2E7B7B6-B146-4955-B2AF-4AAFC4F111B8} = {55D27B7A-9ECC-4D1A-BFED-9967218236A9}
 		{04C627B3-D6E8-4C20-B771-D4D9DC46B63E} = {A60E3CF2-101F-4E07-860C-56568287A3AA}
 		{9DF2FD76-C2E8-4A7E-8662-551E3CCE77A6} = {A60E3CF2-101F-4E07-860C-56568287A3AA}
+		{7F5D6F00-4956-4D21-B4D8-E435CE88D133} = {24EA6106-D393-40F0-8F27-DA1DF801C6EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69DB9CD6-DE69-4C59-850D-8FFABA4B2FA6}

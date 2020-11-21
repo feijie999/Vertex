@@ -45,10 +45,9 @@ namespace Vertex.Grain.EntityFramework
             this.Mapper.Map(evt.Snapshot, snapshotState);
         }
 
-        public void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingSnapshotEvent<TPrimaryKey> evt)
+        public void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingSnapshotEvent<TSnapshot> evt)
         {
-            var defaultSnapshot = new TSnapshot();
-            this.Mapper.Map(defaultSnapshot, snapshotState);
+            this.Mapper.Map(evt.Snapshot, snapshotState);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Vertex.Grain.EntityFramework.Abstractions.Events
         {
         }
 
-        public UpdatingSnapshotEvent(TSnapshot snapshot) : this()
+        public UpdatingSnapshotEvent(TSnapshot snapshot)
         {
             Snapshot = snapshot;
         }

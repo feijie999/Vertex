@@ -11,5 +11,9 @@ namespace Vertex.Grain.EntityFramework.Abstractions
         void Apply(SnapshotUnit<TPrimaryKey, TSnapshot> snapshotBox, EventUnit<TPrimaryKey> eventBox);
 
         void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingSnapshotEvent<TSnapshot> evt);
+
+        void UpdatingSnapshotHandle(TSnapshot snapshotState, UpdatingSnapshotEvent<TSnapshot> evt);
+
+        void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingSnapshotEvent<TSnapshot> evt);
     }
 }

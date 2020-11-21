@@ -69,7 +69,7 @@ namespace Vertex.Grain.EntityFramework
 
         public virtual async Task Delete(string flowId = "")
         {
-            var evt = new DeletingSnapshotEvent<TPrimaryKey>(this.ActorId);
+            var evt = new DeletingSnapshotEvent<TSnapshotType>(Snapshot.Data);
             await this.OnDeactivateAsync();
             await this.RaiseEvent(evt, flowId);
         }

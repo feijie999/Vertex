@@ -40,7 +40,7 @@ namespace Vertex.Grain.EntityFramework
                 case UpdatingSnapshotEvent<TSnapshot> evt:
                     await this.UpdatingSnapshotHandle(evt);
                     break;
-                case DeletingSnapshotEvent<TPrimaryKey> evt:
+                case DeletingSnapshotEvent<TSnapshot> evt:
                     await this.DeletingSnapshotHandle(evt);
                     break;
             }
@@ -63,7 +63,7 @@ namespace Vertex.Grain.EntityFramework
             await dbContext.SaveChangesAsync();
         }
 
-        protected virtual async Task DeletingSnapshotHandle(DeletingSnapshotEvent<TPrimaryKey> evt)
+        protected virtual async Task DeletingSnapshotHandle(DeletingSnapshotEvent<TSnapshot> evt)
         {
             await using var dbContext = this.GetDbContext();
             var entity = dbContext.Find<TEntityType>(this.ActorId);

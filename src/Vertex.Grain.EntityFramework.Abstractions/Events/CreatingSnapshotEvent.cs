@@ -1,4 +1,5 @@
 ﻿using System;
+using Vertex.Abstractions.Event;
 using Vertext.Abstractions.Event;
 
 namespace Vertex.Grain.EntityFramework.Abstractions.Events

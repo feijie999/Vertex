@@ -1,20 +1,23 @@
 ﻿using System;
+using Vertex.Abstractions.Event;
 using Vertext.Abstractions.Event;
 
 namespace Vertex.Grain.EntityFramework.Abstractions.Events
 {
     [Serializable]
-    public class DeletingSnapshotEvent<TPrimaryKey> : IEvent
+    public class DeletingSnapshotEvent<TSnapshot> : IEvent
+        where TSnapshot : class, new()
     {
-        public TPrimaryKey PrimaryKey { get; set; }
+        public TSnapshot Snapshot { get; set; }
 
         public DeletingSnapshotEvent()
         {
         }
 
-        public DeletingSnapshotEvent(TPrimaryKey primaryKey) : this()
+        public DeletingSnapshotEvent(TSnapshot snapshot)
+            : this()
         {
-            PrimaryKey = primaryKey;
+            Snapshot = snapshot;
         }
     }
 }

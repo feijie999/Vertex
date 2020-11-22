@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Orleans;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Transfer.Grains.Events;
 using Transfer.Grains.Snapshot;
 using Transfer.IGrains.Common;
@@ -33,7 +34,7 @@ namespace Transfer.Grains.Common
 
         public async Task EventHandle(CreateEvent evt, EventMeta eventBase)
         {
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 try
                 {
@@ -55,7 +56,7 @@ namespace Transfer.Grains.Common
 
         public async Task EventHandle(TransferEvent evt, EventMeta eventBase)
         {
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 var entity = await db.Accounts.FirstOrDefaultAsync(x => x.Id == this.ActorId);
                 this.accountSnapshotHandler.EntityHandle(entity, evt);
@@ -65,7 +66,7 @@ namespace Transfer.Grains.Common
 
         public async Task EventHandle(TopupEvent evt, EventMeta eventBase)
         {
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 var entity = await db.Accounts.FirstOrDefaultAsync(x => x.Id == this.ActorId);
                 this.accountSnapshotHandler.EntityHandle(entity, evt);
@@ -75,7 +76,7 @@ namespace Transfer.Grains.Common
 
         public async Task EventHandle(TransferArrivedEvent evt, EventMeta eventBase)
         {
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 var entity = await db.Accounts.FirstOrDefaultAsync(x => x.Id == this.ActorId);
                 this.accountSnapshotHandler.EntityHandle(entity, evt);
@@ -85,7 +86,7 @@ namespace Transfer.Grains.Common
 
         public async Task EventHandle(TransferRefundsEvent evt, EventMeta eventBase)
         {
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 var entity = await db.Accounts.FirstOrDefaultAsync(x => x.Id == this.ActorId);
                 this.accountSnapshotHandler.EntityHandle(entity, evt);

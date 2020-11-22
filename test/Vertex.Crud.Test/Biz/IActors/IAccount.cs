@@ -13,7 +13,7 @@ using Vertex.Runtime.Test.Snapshot;
 
 namespace Vertex.Runtime.Test.IActors
 {
-    public interface IAccount : ICrudGrain<AccountSnapshot>, IVertexActor, IGrainWithIntegerKey
+    public interface IAccount : ICrudGrain<AccountSnapshot>, IGrainWithIntegerKey
     {
         Task<SnapshotUnit<long, AccountSnapshot>> GetSnapshot();
 

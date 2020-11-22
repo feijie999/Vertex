@@ -18,15 +18,9 @@ namespace Vertex.Crud.Test.Biz.Actors
     [StreamSub(nameof(Account), "db", 3)]
     public sealed class AccountDb : CrudDbGrain<long, AccountSnapshot, AccountEntity, TestDbContext>, IAccountDb
     {
-        private readonly IGrainFactory grainFactory;
         private int executedTimes;
 
-        public AccountDb(IGrainFactory grainFactory)
-        {
-            this.grainFactory = grainFactory;
-        }
-
-        public override IVertexActor Vertex => this.grainFactory.GetGrain<IAccount>(this.ActorId);
+        public override IVertexActor Vertex => this.GrainFactory.GetGrain<IAccount>(this.ActorId);
 
         public Task EventHandle(TransferEvent evt, EventMeta eventBase)
         {

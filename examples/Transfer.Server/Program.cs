@@ -9,6 +9,7 @@ using AutoMapper;
 using LinqToDB.Common;
 using LinqToDB.Data;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +21,7 @@ using Orleans.Hosting;
 using Transfer.Grains;
 using Transfer.Grains.Common;
 using Transfer.Repository;
+using Vertex.Grain.EntityFramework;
 using Vertex.Runtime;
 using Vertex.Runtime.InnerService;
 using Vertex.Runtime.Options;
@@ -152,7 +154,12 @@ namespace Transfer.Server
                     {
                         options.SnapshotVersionInterval = 30;
                     });
-                    serviceCollection.AddAutoMapper(typeof(Account));
+                    serviceCollection.AddCrudGrain(new[] { typeof(Account).Assembly })
+                        .AddEntityFrameworkNpgsql()
+                        .AddDbContext<TransferDbContext>(builder =>
+                        {
+                            builder.UseNpgsql(TransferDbContext.ConnectionString);
+                        }, ServiceLifetime.Transient);
                     serviceCollection.AddSingleton(Configuration);
                 })
                 .ConfigureLogging(logging =>

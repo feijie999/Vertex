@@ -16,12 +16,14 @@ namespace Vertex.Grain.EntityFramework
         where TSnapshotType : class, ISnapshot, TEntityType, new()
         where TEntityType : class, new()
         where TSnapshotDto : class, new()
-        where TPrimaryKey : new()
         where TDbContext : DbContext
     {
         protected IMapper Mapper { get; private set; }
 
-        protected abstract TDbContext GetDbContext();
+        protected virtual TDbContext GetDbContext()
+        {
+            return this.ServiceProvider.GetService<TDbContext>();
+        }
 
         protected override async ValueTask CreateSnapshot()
         {

@@ -1,11 +1,13 @@
 ﻿using System;
+using AutoMapper;
 using Vertex.Crud.Test.Biz.Snapshot;
+using Vertex.Grain.EntityFramework;
 using Vertex.Runtime.Snapshot;
 using Vertex.Runtime.Test.Events;
 
 namespace Vertex.Runtime.Test.Snapshot
 {
-    public class AccountSnapshotHandler : SnapshotHandlerBase<long, AccountSnapshot>
+    public class AccountSnapshotHandler : CrudHandler<long, AccountSnapshot>
     {
         public void EventHandle(AccountSnapshot state, TopupEvent evt)
         {
@@ -30,6 +32,10 @@ namespace Vertex.Runtime.Test.Snapshot
         public void EventHandle(AccountSnapshot state, ErrorTestEvent evt)
         {
             throw new ArgumentException();
+        }
+
+        public AccountSnapshotHandler(IMapper mapper) : base(mapper)
+        {
         }
     }
 }

@@ -24,10 +24,13 @@ namespace Vertex.Grain.EntityFramework
             switch (eventBox.Event)
             {
                 case CreatingSnapshotEvent<TSnapshot>:
+                    CreatingSnapshotHandle(snapshotBox.Data,(CreatingSnapshotEvent<TSnapshot>)eventBox.Event);
                     return;
                 case UpdatingSnapshotEvent<TSnapshot>:
+                    UpdatingSnapshotHandle(snapshotBox.Data, (UpdatingSnapshotEvent<TSnapshot>) eventBox.Event);
                     return;
                 case DeletingSnapshotEvent<TSnapshot>:
+                    DeletingSnapshotHandle(snapshotBox.Data, (DeletingSnapshotEvent<TSnapshot>)eventBox.Event);
                     return;
                 default:
                     base.Apply(snapshotBox, eventBox);

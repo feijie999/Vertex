@@ -7,6 +7,7 @@
   <ItemGroup>
   	<PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" />
     <ProjectReference Include="..\..\src\Vertex.Abstractions\Vertex.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Vertex.Transaction.Abstractions\Vertex.Transaction.Abstractions.csproj" />
   </ItemGroup>
 

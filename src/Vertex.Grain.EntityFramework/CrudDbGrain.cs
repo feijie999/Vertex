@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Orleans;
 using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions;
 using Vertex.Grain.EntityFramework.Abstractions.Events;
@@ -15,6 +16,7 @@ namespace Vertex.Grain.EntityFramework
         where TEntityType : class, new()
         where TDbContext : DbContext
     {
+        protected IGrainFactory GrainFactory;
         protected ICrudHandler<TPrimaryKey, TSnapshot> crudHandle;
         protected IMapper mapper;
 
@@ -25,6 +27,7 @@ namespace Vertex.Grain.EntityFramework
 
         protected override ValueTask DependencyInjection()
         {
+            this.GrainFactory = this.ServiceProvider.GetService<IGrainFactory>();
             this.crudHandle = this.ServiceProvider.GetService<ICrudHandler<TPrimaryKey, TSnapshot>>();
             this.mapper = this.ServiceProvider.GetService<IMapper>();
             return base.DependencyInjection();

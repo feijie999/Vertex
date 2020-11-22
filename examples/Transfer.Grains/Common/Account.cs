@@ -23,7 +23,7 @@ namespace Transfer.Grains.Common
         protected override async ValueTask CreateSnapshot()
         {
             await base.CreateSnapshot();
-            using (var db = new TransferDbContext())
+            using (var db = this.ServiceProvider.GetService<TransferDbContext>())
             {
                 var entity = await db.Accounts.FirstOrDefaultAsync(x => x.Id == this.ActorId);
                 if (entity != null)

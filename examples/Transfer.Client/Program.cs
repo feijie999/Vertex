@@ -6,10 +6,12 @@ using System.Net;
 using System.Threading.Tasks;
 using IdGen;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 using Transfer.IGrains.Common;
+using Transfer.IGrains.Dto;
 using Transfer.IGrains.DTx;
 
 namespace Transfer.Client
@@ -24,7 +26,7 @@ namespace Transfer.Client
 
             while (true)
             {
-                Console.WriteLine("Please select the type(1:normal,2:DTx)");
+                Console.WriteLine("Please select the type(1:normal,2:DTx,3:Crud)");
                 var type = int.Parse(Console.ReadLine() ?? "1");
                 if (type == 1)
                 {
@@ -33,6 +35,10 @@ namespace Transfer.Client
                 else if (type == 2)
                 {
                     await DTx(client);
+                }
+                else if (type == 3)
+                {
+                    await Crud(client);
                 }
             }
         }
@@ -162,6 +168,63 @@ namespace Transfer.Client
                 {
                     Console.WriteLine($"The balance of account {account} is{await client.GetGrain<IDTxAccount>(account + accountCount).GetBalance()}");
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        private static async Task Crud(IClusterClient client)
+        {
+            try
+            {
+                Console.WriteLine("Please enter the number of executions");
+                var times = int.Parse(Console.ReadLine() ?? "10");
+                var idDic = new Dictionary<int, string>();
+                foreach (var i in Enumerable.Range(0, times))
+                {
+                    idDic.Add(i, Guid.NewGuid().ToString());
+                }
+                var taskList = new List<Task>();
+                taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
+                {
+                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    await actor.Create(new ProjectDto()
+                    {
+                        CreateTime = DateTime.Now,
+                        Id = idDic[x],
+                        Name = "name" + x
+                    }, Guid.NewGuid().ToString());
+                }));
+                await Task.WhenAll(taskList);
+                taskList.Clear();
+                taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
+                {
+                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var dto = await actor.Get();
+                    Console.WriteLine("Projct is :" + JsonConvert.SerializeObject(dto));
+                }));
+                await Task.WhenAll(taskList);
+                taskList.Clear();
+                taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
+                {
+                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    await actor.Update(new ProjectDto()
+                    {
+                        Id = idDic[x],
+                        Name = "name" + x + "Updated"
+                    }, Guid.NewGuid().ToString());
+                }));
+                await Task.WhenAll(taskList);
+                taskList.Clear();
+
+                taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
+                {
+                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var dto = await actor.Get();
+                    Console.WriteLine("Projct updated is :" + JsonConvert.SerializeObject(dto));
+                }));
             }
             catch (Exception e)
             {

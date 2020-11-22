@@ -5,20 +5,15 @@ namespace Transfer.Repository
 {
     public sealed class TransferDbContext : DbContext
     {
-        public static string ConnectionString { get; set; }
-        public TransferDbContext()
+        public TransferDbContext(DbContextOptions<TransferDbContext> contextOptions)
+            : base(contextOptions)
         {
-            this.Database.EnsureCreated();
-            this.Database.Migrate();
         }
+        public static string ConnectionString { get; set; }
 
         public DbSet<Account> Accounts { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(ConnectionString);
-            base.OnConfiguring(optionsBuilder);
-        }
+        public DbSet<ProjectEntity> Projects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

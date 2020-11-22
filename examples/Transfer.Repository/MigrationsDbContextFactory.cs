@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Transfer.Repository
 {
@@ -6,7 +7,10 @@ namespace Transfer.Repository
     {
         public TransferDbContext CreateDbContext(string[] args)
         {
-            return new TransferDbContext();
+            var option = new DbContextOptionsBuilder<TransferDbContext>()
+                .UseNpgsql(
+                    "Server=localhost;Port=5432;Database=Vertex;User Id=postgres;Password=postgres;Pooling=true;MaxPoolSize=20;");
+            return new TransferDbContext(option.Options);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Transfer.IGrains.Dto
 {
     public class ProjectDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(32)]
         public string Name { get; set; }

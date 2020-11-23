@@ -34,9 +34,9 @@ namespace Transfer.Repository.Migrations
 
             modelBuilder.Entity("Transfer.Repository.Entities.ProjectEntity", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("timestamp without time zone");

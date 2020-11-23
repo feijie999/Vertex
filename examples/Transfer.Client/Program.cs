@@ -181,15 +181,15 @@ namespace Transfer.Client
             {
                 Console.WriteLine("Please enter the number of executions");
                 var times = int.Parse(Console.ReadLine() ?? "10");
-                var idDic = new Dictionary<int, string>();
+                var idDic = new Dictionary<int, Guid>();
                 foreach (var i in Enumerable.Range(0, times))
                 {
-                    idDic.Add(i, Guid.NewGuid().ToString());
+                    idDic.Add(i, Guid.NewGuid());
                 }
                 var taskList = new List<Task>();
                 taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
                 {
-                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var actor = client.GetGrain<IProject>(idDic[x]);
                     await actor.Create(new ProjectDto()
                     {
                         CreateTime = DateTime.Now,
@@ -201,7 +201,7 @@ namespace Transfer.Client
                 taskList.Clear();
                 taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
                 {
-                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var actor = client.GetGrain<IProject>(idDic[x]);
                     var dto = await actor.Get();
                     Console.WriteLine("Projct is :" + JsonConvert.SerializeObject(dto));
                 }));
@@ -209,7 +209,7 @@ namespace Transfer.Client
                 taskList.Clear();
                 taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
                 {
-                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var actor = client.GetGrain<IProject>(idDic[x]);
                     await actor.Update(new ProjectDto()
                     {
                         Id = idDic[x],
@@ -221,7 +221,7 @@ namespace Transfer.Client
 
                 taskList.AddRange(Enumerable.Range(0, times).Select(async x =>
                 {
-                    var actor = client.GetGrain<IProject>(idDic[x].ToString());
+                    var actor = client.GetGrain<IProject>(idDic[x]);
                     var dto = await actor.Get();
                     Console.WriteLine("Projct updated is :" + JsonConvert.SerializeObject(dto));
                 }));

@@ -47,12 +47,6 @@ namespace Vertex.Crud.Test.ActorTest
             await accountActor.Create(dto, Guid.NewGuid().ToString());
             var snapshot = await accountActor.Get();
             Assert.Equal(snapshot.Balance, dto.Balance);
-            await Task.Delay(100);
-            using (var dbContext = this.fixture.Provider.GetService<TestDbContext>())
-            {
-                var entity = await dbContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-                Assert.NotNull(entity);
-            }
         }
 
         /// <summary>
@@ -80,46 +74,26 @@ namespace Vertex.Crud.Test.ActorTest
             await accountActor.Update(dto, Guid.NewGuid().ToString());
             snapshot = await accountActor.Get();
             Assert.Equal(snapshot.Balance, dto.Balance);
-            await Task.Delay(100);
-            using (var dbContext = this.fixture.Provider.GetService<TestDbContext>())
-            {
-                var entity = await dbContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-                Assert.NotNull(entity);
-                Assert.Equal(snapshot.Balance, entity.Balance);
-            }
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        public async Task Delete(int id)
-        {
-            var accountActor = this.cluster.GrainFactory.GetGrain<IAccount>(id);
-            var dto = new AccountSnapshot()
-            {
-                Id = id,
-                Balance = 10
-            };
-            await accountActor.Create(dto, Guid.NewGuid().ToString());
-            var snapshot = await accountActor.Get();
-            Assert.Equal(snapshot.Balance, dto.Balance);
-            await Task.Delay(100);
-            using (var dbContext = this.fixture.Provider.GetService<TestDbContext>())
-            {
-                var entity = await dbContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-                Assert.NotNull(entity);
-                Assert.Equal(snapshot.Balance, entity.Balance);
-            }
-
-            await accountActor.Delete(Guid.NewGuid().ToString());
-            snapshot = await accountActor.Get();
-            Assert.Equal(0, snapshot.Balance);
-            await Task.Delay(100);
-            using (var dbContext = this.fixture.Provider.GetService<TestDbContext>())
-            {
-                var entity = await dbContext.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-                Assert.Null(entity);
-            }
-        }
+        // [Theory]
+        // [InlineData(1)]
+        // [InlineData(2)]
+        // public async Task Delete(int id)
+        // {
+        //     var accountActor = this.cluster.GrainFactory.GetGrain<IAccount>(id);
+        //     var dto = new AccountSnapshot()
+        //     {
+        //         Id = id,
+        //         Balance = 10
+        //     };
+        //     await accountActor.Create(dto, Guid.NewGuid().ToString());
+        //     var snapshot = await accountActor.Get();
+        //     Assert.Equal(snapshot.Balance, dto.Balance);
+        //
+        //     await accountActor.Delete(Guid.NewGuid().ToString());
+        //     snapshot = await accountActor.Get();
+        //     Assert.Equal(0, snapshot.Balance);
+        // }
     }
 }

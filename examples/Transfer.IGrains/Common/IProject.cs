@@ -4,7 +4,7 @@ using Vertex.Grain.EntityFramework.Abstractions;
 
 namespace Transfer.IGrains.Common
 {
-    public interface IProject : ICrudGrain<ProjectDto>, IGrainWithStringKey
+    public interface IProject : ICrudGrain<ProjectDto>, IGrainWithGuidKey
     {
     }
 }

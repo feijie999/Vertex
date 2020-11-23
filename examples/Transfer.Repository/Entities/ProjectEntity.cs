@@ -5,8 +5,7 @@ namespace Transfer.Repository.Entities
 {
     public class ProjectEntity
     {
-        [MaxLength(64)]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [MaxLength(32)]
         public string Name { get; set; }

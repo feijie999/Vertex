@@ -12,7 +12,7 @@ namespace Transfer.Grains.Common
 {
     [SnapshotStorage(Consts.CoreDbName, nameof(ProjectDb), 3)]
     [StreamSub(nameof(Project), "db", 3)]
-    public class ProjectDb : CrudDbGrain<string, ProjectSnapshot, ProjectEntity, TransferDbContext>, IProjectDb
+    public class ProjectDb : CrudDbGrain<Guid, ProjectSnapshot, ProjectEntity, TransferDbContext>, IProjectDb
     {
         public override IVertexActor Vertex => this.GrainFactory.GetGrain<IProject>(this.ActorId);
     }

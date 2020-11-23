@@ -14,7 +14,7 @@ namespace Transfer.Grains.Common
     [EventArchive(Consts.CoreDbName, nameof(Project), "month")]
     [SnapshotStorage(Consts.CoreDbName, nameof(Project), 3)]
     [Stream(nameof(Project), 3)]
-    public class Project : CrudGrain<string, ProjectSnapshot, ProjectEntity, ProjectDto, TransferDbContext>, IProject
+    public class Project : CrudGrain<Guid, ProjectSnapshot, ProjectEntity, ProjectDto, TransferDbContext>, IProject
     {
     }
 }

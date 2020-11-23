@@ -10,8 +10,8 @@ using Transfer.Repository;
 namespace Transfer.Repository.Migrations
 {
     [DbContext(typeof(TransferDbContext))]
-    [Migration("20201122154345_AddInit")]
-    partial class AddInit
+    [Migration("20201123011433_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,9 +36,9 @@ namespace Transfer.Repository.Migrations
 
             modelBuilder.Entity("Transfer.Repository.Entities.ProjectEntity", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("timestamp without time zone");

@@ -6,14 +6,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="Vertex.Grain.EntityFramework" VersionOverride="1.0.49-alpha-gfe12ecc094" />
+    <PackageReference Include="Vertex.Storage.Linq2db" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Stream.Common" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Transaction" VersionOverride="1.0.39-alpha" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Storage\Vertex.Storage.Linq2db\Vertex.Storage.Linq2db.csproj" />
-    <ProjectReference Include="..\..\src\Stream\Vertex.Stream.Common\Vertex.Stream.Common.csproj" />
-    <ProjectReference Include="..\..\src\Vertex.Grain.EntityFramework\Vertex.Grain.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\src\Vertex.Runtime\Vertex.Runtime.csproj" />
-    <ProjectReference Include="..\..\src\Vertex.Transaction\Vertex.Transaction.csproj" />
     <ProjectReference Include="..\Transfer.IGrains\Transfer.IGrains.csproj" />
     <ProjectReference Include="..\Transfer.Repository\Transfer.Repository.csproj" />
   </ItemGroup>

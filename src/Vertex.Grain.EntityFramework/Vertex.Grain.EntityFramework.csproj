@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    <Sdk Name="Microsoft.Build.CentralPackageVersions" />
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Authors>feijie</Authors>
+      <PackageProjectUrl>https://github.com/feijie999/Vertex</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/feijie999/Vertex.git</RepositoryUrl>
+      <PackageVersion>1.1.0</PackageVersion>
+    </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Vertex.Runtime\Vertex.Runtime.csproj" />
         <ProjectReference Include="..\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="5.0.0" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" VersionOverride="8.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+        <PackageReference Include="Vertex.Runtime" Version="1.0.39-alpha" />
     </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ namespace Vertex.Grain.EntityFramework
         private readonly ConcurrentDictionary<Type, string> typeDict = new ConcurrentDictionary<Type, string>();
         private readonly ILogger<EventTypeContainer> logger;
 
-        public CrudEventTypeContainer(ILogger<EventTypeContainer> logger, IEventNameGenerator eventNameGenerator)
+        public CrudEventTypeContainer(ILogger<EventTypeContainer> logger)
         {
             this.logger = logger;
             var baseEventType = typeof(IEvent);
@@ -32,17 +32,9 @@ namespace Vertex.Grain.EntityFramework
                                               && nameAttribute.Name != default)
                         {
                             eventName = nameAttribute.Name;
+                            this.nameDict.TryAdd(eventName, type);
+                            this.typeDict.TryAdd(type, eventName);
                         }
-                        else
-                        {
-                            eventName = eventNameGenerator.GetName(type);
-                        }
-                        if (!this.nameDict.TryAdd(eventName, type))
-                        {
-                            throw new OverflowException(eventName);
-                        }
-
-                        this.typeDict.TryAdd(type, eventName);
                     }
                 }
             }

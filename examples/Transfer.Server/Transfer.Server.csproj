@@ -13,14 +13,14 @@
     <PackageReference Include="MySqlConnector" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" />
+    <PackageReference Include="Vertex.Runtime" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Storage.Linq2db" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Stream.InMemory" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Stream.Kafka" VersionOverride="1.0.39-alpha" />
+    <PackageReference Include="Vertex.Stream.RabbitMQ" VersionOverride="1.0.39-alpha" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Storage\Vertex.Storage.Linq2db\Vertex.Storage.Linq2db.csproj" />
-    <ProjectReference Include="..\..\src\Stream\Vertex.Stream.InMemory\Vertex.Stream.InMemory.csproj" />
-    <ProjectReference Include="..\..\src\Stream\Vertex.Stream.Kafka\Vertex.Stream.Kafka.csproj" />
-    <ProjectReference Include="..\..\src\Stream\Vertex.Stream.RabbitMQ\Vertex.Stream.RabbitMQ.csproj" />
-    <ProjectReference Include="..\..\src\Vertex.Runtime\Vertex.Runtime.csproj" />
     <ProjectReference Include="..\Transfer.Grains\Transfer.Grains.csproj" />
   </ItemGroup>
 

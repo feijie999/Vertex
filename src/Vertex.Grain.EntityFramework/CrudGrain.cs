@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions;
-using Vertex.Grain.EntityFramework.Abstractions.Events;
 using Vertex.Runtime.Actor;
 
 namespace Vertex.Grain.EntityFramework
@@ -53,7 +51,7 @@ namespace Vertex.Grain.EntityFramework
         public virtual Task Create(TSnapshotDto snapshot, string flowId = "")
         {
             var snapshotState = this.Mapper.Map<TSnapshotType>(snapshot);
-            var evt = new CreatingSnapshotEvent<TSnapshotType>(snapshotState);
+            var evt = new CreatingEvent<TSnapshotType>(snapshotState);
             return this.RaiseEvent(evt, flowId);
         }
 
@@ -65,13 +63,13 @@ namespace Vertex.Grain.EntityFramework
         public virtual Task Update(TSnapshotDto snapshot, string flowId = "")
         {
             var snapshotState = this.Mapper.Map<TSnapshotType>(snapshot);
-            var evt = new UpdatingSnapshotEvent<TSnapshotType>(snapshotState);
+            var evt = new UpdatingEvent<TSnapshotType>(snapshotState);
             return this.RaiseEvent(evt, flowId);
         }
 
         public virtual async Task Delete(string flowId = "")
         {
-            var evt = new DeletingSnapshotEvent<TSnapshotType>(Snapshot.Data);
+            var evt = new DeletingEvent<TSnapshotType>(Snapshot.Data);
             await this.OnDeactivateAsync();
             await this.RaiseEvent(evt, flowId);
         }

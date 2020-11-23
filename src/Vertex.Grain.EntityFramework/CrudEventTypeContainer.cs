@@ -13,11 +13,9 @@ namespace Vertex.Grain.EntityFramework
     {
         private readonly ConcurrentDictionary<string, Type> nameDict = new ConcurrentDictionary<string, Type>();
         private readonly ConcurrentDictionary<Type, string> typeDict = new ConcurrentDictionary<Type, string>();
-        private readonly ConcurrentDictionary<string, string> typeShortNameDict = new ConcurrentDictionary<string, string>();
         private readonly ILogger<EventTypeContainer> logger;
-        public const int MaxEventNameLength = 100;
 
-        public CrudEventTypeContainer(ILogger<EventTypeContainer> logger)
+        public CrudEventTypeContainer(ILogger<EventTypeContainer> logger, IEventNameGenerator eventNameGenerator)
         {
             this.logger = logger;
             var baseEventType = typeof(IEvent);
@@ -28,17 +26,23 @@ namespace Vertex.Grain.EntityFramework
                 {
                     if (baseEventType.IsAssignableFrom(type))
                     {
+                        string eventName;
                         var attribute = type.GetCustomAttributes(attributeType, false).FirstOrDefault();
                         if (attribute != null && attribute is EventNameAttribute nameAttribute
                                               && nameAttribute.Name != default)
                         {
-                            if (!this.nameDict.TryAdd(nameAttribute.Name, type))
-                            {
-                                throw new ArgumentException(nameAttribute.Name);
-                            }
-
-                            this.typeDict.TryAdd(type, nameAttribute.Name);
+                            eventName = nameAttribute.Name;
                         }
+                        else
+                        {
+                            eventName = eventNameGenerator.GetName(type);
+                        }
+                        if (!this.nameDict.TryAdd(eventName, type))
+                        {
+                            throw new OverflowException(eventName);
+                        }
+
+                        this.typeDict.TryAdd(type, eventName);
                     }
                 }
             }
@@ -46,11 +50,6 @@ namespace Vertex.Grain.EntityFramework
 
         public bool TryGet(string name, out Type type)
         {
-            if (typeShortNameDict.TryGetValue(name, out var fullName))
-            {
-                name = fullName;
-            }
-
             var value = this.nameDict.GetOrAdd(name, key =>
             {
                 foreach (var assembly in AssemblyHelper.GetAssemblies(this.logger))
@@ -73,21 +72,6 @@ namespace Vertex.Grain.EntityFramework
         {
             var value = this.typeDict.GetOrAdd(type, key =>
             {
-                if (type.FullName.Length > MaxEventNameLength)
-                {
-                    if (type.IsGenericType)
-                    {
-                        var shortName = type.Name + string.Join('_', type.GetGenericArguments().Select(x => x.FullName));
-                        typeShortNameDict.TryAdd(shortName,
-                            type.FullName);
-                        return shortName.Substring(shortName.Length - MaxEventNameLength < 0 ? 0 : (shortName.Length - MaxEventNameLength));
-                    }
-                    else
-                    {
-                        return type.FullName.Substring(type.FullName.Length - MaxEventNameLength < 0 ? 0 : type.FullName.Length - MaxEventNameLength);
-                    }
-
-                }
                 return type.FullName;
             });
 

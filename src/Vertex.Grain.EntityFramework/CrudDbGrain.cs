@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Orleans;
 using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions;
-using Vertex.Grain.EntityFramework.Abstractions.Events;
 using Vertex.Runtime.Actor;
 using Vertext.Abstractions.Event;
 
@@ -37,20 +36,20 @@ namespace Vertex.Grain.EntityFramework
         {
             switch (eventUnit.Event)
             {
-                case CreatingSnapshotEvent<TSnapshot> evt:
+                case CreatingEvent<TSnapshot> evt:
                     await this.CreatingSnapshotHandle(evt);
                     break;
-                case UpdatingSnapshotEvent<TSnapshot> evt:
+                case UpdatingEvent<TSnapshot> evt:
                     await this.UpdatingSnapshotHandle(evt);
                     break;
-                case DeletingSnapshotEvent<TSnapshot> evt:
+                case DeletingEvent<TSnapshot> evt:
                     await this.DeletingSnapshotHandle(evt);
                     break;
             }
             await base.OnEventDelivered(eventUnit);
         }
 
-        protected virtual async Task CreatingSnapshotHandle(CreatingSnapshotEvent<TSnapshot> evt)
+        protected virtual async Task CreatingSnapshotHandle(CreatingEvent<TSnapshot> evt)
         {
             await using var dbContext = this.GetDbContext();
             var entity = this.mapper.Map<TEntityType>(evt.Snapshot);
@@ -58,7 +57,7 @@ namespace Vertex.Grain.EntityFramework
             await dbContext.SaveChangesAsync();
         }
 
-        protected virtual async Task UpdatingSnapshotHandle(UpdatingSnapshotEvent<TSnapshot> evt)
+        protected virtual async Task UpdatingSnapshotHandle(UpdatingEvent<TSnapshot> evt)
         {
             await using var dbContext = this.GetDbContext();
             var entity = this.mapper.Map<TEntityType>(evt.Snapshot);
@@ -66,7 +65,7 @@ namespace Vertex.Grain.EntityFramework
             await dbContext.SaveChangesAsync();
         }
 
-        protected virtual async Task DeletingSnapshotHandle(DeletingSnapshotEvent<TSnapshot> evt)
+        protected virtual async Task DeletingSnapshotHandle(DeletingEvent<TSnapshot> evt)
         {
             await using var dbContext = this.GetDbContext();
             var entity = dbContext.Find<TEntityType>(this.ActorId);

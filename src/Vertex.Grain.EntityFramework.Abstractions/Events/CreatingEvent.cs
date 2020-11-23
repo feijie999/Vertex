@@ -2,19 +2,19 @@
 using Vertex.Abstractions.Event;
 using Vertext.Abstractions.Event;
 
-namespace Vertex.Grain.EntityFramework.Abstractions.Events
+namespace Vertex
 {
     [Serializable]
-    public class CreatingSnapshotEvent<TSnapshot> : IEvent
+    public class CreatingEvent<TSnapshot> : IEvent
         where TSnapshot : class, new()
     {
         public TSnapshot Snapshot { get; set; }
 
-        public CreatingSnapshotEvent()
+        public CreatingEvent()
         {
         }
 
-        public CreatingSnapshotEvent(TSnapshot snapshot) : this()
+        public CreatingEvent(TSnapshot snapshot) : this()
         {
             Snapshot = snapshot;
         }

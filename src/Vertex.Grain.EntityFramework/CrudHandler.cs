@@ -1,8 +1,6 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Vertex.Abstractions.Snapshot;
 using Vertex.Grain.EntityFramework.Abstractions;
-using Vertex.Grain.EntityFramework.Abstractions.Events;
 using Vertex.Runtime.Snapshot;
 using Vertext.Abstractions.Event;
 
@@ -23,14 +21,14 @@ namespace Vertex.Grain.EntityFramework
         {
             switch (eventBox.Event)
             {
-                case CreatingSnapshotEvent<TSnapshot>:
-                    CreatingSnapshotHandle(snapshotBox.Data,(CreatingSnapshotEvent<TSnapshot>)eventBox.Event);
+                case CreatingEvent<TSnapshot>:
+                    CreatingSnapshotHandle(snapshotBox.Data,(CreatingEvent<TSnapshot>)eventBox.Event);
                     return;
-                case UpdatingSnapshotEvent<TSnapshot>:
-                    UpdatingSnapshotHandle(snapshotBox.Data, (UpdatingSnapshotEvent<TSnapshot>) eventBox.Event);
+                case UpdatingEvent<TSnapshot>:
+                    UpdatingSnapshotHandle(snapshotBox.Data, (UpdatingEvent<TSnapshot>) eventBox.Event);
                     return;
-                case DeletingSnapshotEvent<TSnapshot>:
-                    DeletingSnapshotHandle(snapshotBox.Data, (DeletingSnapshotEvent<TSnapshot>)eventBox.Event);
+                case DeletingEvent<TSnapshot>:
+                    DeletingSnapshotHandle(snapshotBox.Data, (DeletingEvent<TSnapshot>)eventBox.Event);
                     return;
                 default:
                     base.Apply(snapshotBox, eventBox);
@@ -38,17 +36,17 @@ namespace Vertex.Grain.EntityFramework
             }
         }
 
-        public void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingSnapshotEvent<TSnapshot> evt)
+        public void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingEvent<TSnapshot> evt)
         {
             this.Mapper.Map(evt.Snapshot, snapshotState);
         }
 
-        public void UpdatingSnapshotHandle(TSnapshot snapshotState, UpdatingSnapshotEvent<TSnapshot> evt)
+        public void UpdatingSnapshotHandle(TSnapshot snapshotState, UpdatingEvent<TSnapshot> evt)
         {
             this.Mapper.Map(evt.Snapshot, snapshotState);
         }
 
-        public void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingSnapshotEvent<TSnapshot> evt)
+        public void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingEvent<TSnapshot> evt)
         {
             this.Mapper.Map(evt.Snapshot, snapshotState);
         }

@@ -20,10 +20,10 @@ namespace Vertex.Grain.EntityFramework
             serviceCollection.AddSingleton<IEventTypeContainer, CrudEventTypeContainer>();
             serviceCollection.AddAutoMapper(expression =>
             {
+                configAction?.Invoke(expression);
                 var baseEventType = typeof(ISnapshot);
                 foreach (var assembly in AssemblyHelper.GetAssemblies())
                 {
-
                     foreach (var type in assembly.GetTypes().Where(x => baseEventType.IsAssignableFrom(x) && !x.IsAbstract))
                     {
                         expression.CreateMap(type, type);

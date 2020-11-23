@@ -1,6 +1,5 @@
 ﻿using System;
 using Vertex.Abstractions.Snapshot;
-using Vertex.Grain.EntityFramework.Abstractions.Events;
 using Vertext.Abstractions.Event;
 
 namespace Vertex.Grain.EntityFramework.Abstractions
@@ -10,10 +9,10 @@ namespace Vertex.Grain.EntityFramework.Abstractions
     {
         void Apply(SnapshotUnit<TPrimaryKey, TSnapshot> snapshotBox, EventUnit<TPrimaryKey> eventBox);
 
-        void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingSnapshotEvent<TSnapshot> evt);
+        void CreatingSnapshotHandle(TSnapshot snapshotState, CreatingEvent<TSnapshot> evt);
 
-        void UpdatingSnapshotHandle(TSnapshot snapshotState, UpdatingSnapshotEvent<TSnapshot> evt);
+        void UpdatingSnapshotHandle(TSnapshot snapshotState, UpdatingEvent<TSnapshot> evt);
 
-        void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingSnapshotEvent<TSnapshot> evt);
+        void DeletingSnapshotHandle(TSnapshot snapshotState, DeletingEvent<TSnapshot> evt);
     }
 }

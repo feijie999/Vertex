@@ -7,7 +7,7 @@ using Vertex.Abstractions.Snapshot;
 namespace Vertex.Grain.EntityFramework
 {
     public abstract class CrudGrain<TPrimaryKey, TSnapshotType, TEntityType, TSnapshotDto, TDbContext> :
-        CrudGrain<TPrimaryKey,TSnapshotType,TSnapshotDto>
+        CrudGrain<TPrimaryKey, TSnapshotType, TSnapshotDto>
         where TSnapshotType : class, ISnapshot, TEntityType, new()
         where TEntityType : class, new()
         where TSnapshotDto : class, new()
@@ -22,6 +22,7 @@ namespace Vertex.Grain.EntityFramework
 
         protected override async ValueTask CreateSnapshot()
         {
+            await base.CreateSnapshot();
             using (var dbContext = this.GetDbContext())
             {
                 var entity = await dbContext.Set<TEntityType>().FindAsync(this.ActorId);
@@ -29,10 +30,6 @@ namespace Vertex.Grain.EntityFramework
                 {
                     this.Snapshot.Data = this.ServiceProvider.GetService<IMapper>()
                         .Map<TEntityType, TSnapshotType>(entity);
-                }
-                else
-                {
-                    await base.CreateSnapshot();
                 }
             }
         }
@@ -42,6 +39,5 @@ namespace Vertex.Grain.EntityFramework
             this.Mapper = this.ServiceProvider.GetService<IMapper>();
             return base.DependencyInjection();
         }
-
     }
 }

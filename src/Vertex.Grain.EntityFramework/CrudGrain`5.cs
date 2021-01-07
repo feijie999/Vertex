@@ -8,7 +8,7 @@ namespace Vertex.Grain.EntityFramework
 {
     public abstract class CrudGrain<TPrimaryKey, TSnapshotType, TEntityType, TSnapshotDto, TDbContext> :
         CrudGrain<TPrimaryKey, TSnapshotType, TSnapshotDto>
-        where TSnapshotType : class, ISnapshot, TEntityType, new()
+        where TSnapshotType : class, ISnapshot, new()
         where TEntityType : class, new()
         where TSnapshotDto : class, new()
         where TDbContext : DbContext

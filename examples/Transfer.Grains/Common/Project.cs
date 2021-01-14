@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Transfer.Grains.Snapshot;
 using Transfer.IGrains.Common;
 using Transfer.IGrains.Dto;
@@ -16,5 +17,6 @@ namespace Transfer.Grains.Common
     [Stream(nameof(Project), 3)]
     public class Project : CrudGrain<Guid, ProjectSnapshot, ProjectEntity, ProjectDto, TransferDbContext>, IProject
     {
+        public override Expression<Func<ProjectEntity, bool>> FindEntityExpression => x => x.Id == ActorId;
     }
 }

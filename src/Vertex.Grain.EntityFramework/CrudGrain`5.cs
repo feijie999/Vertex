@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Vertex.Abstractions.Snapshot;
@@ -20,16 +24,19 @@ namespace Vertex.Grain.EntityFramework
             return this.ServiceProvider.GetService<TDbContext>();
         }
 
+        public abstract Expression<Func<TEntityType, bool>> FindEntityExpression { get; }
+
         protected override async ValueTask CreateSnapshot()
         {
             await base.CreateSnapshot();
             using (var dbContext = this.GetDbContext())
             {
-                var entity = await dbContext.Set<TEntityType>().FindAsync(this.ActorId);
-                if (entity != null)
+                var snapshot = await dbContext.Set<TEntityType>().AsNoTracking().Where(FindEntityExpression)
+                    .ProjectTo<TSnapshotType>(Mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+                if (snapshot != null)
                 {
-                    this.Snapshot.Data = this.ServiceProvider.GetService<IMapper>()
-                        .Map<TEntityType, TSnapshotType>(entity);
+                    this.Snapshot.Data = snapshot;
                 }
             }
         }

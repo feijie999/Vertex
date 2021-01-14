@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Vertex.Abstractions.Event;
@@ -25,6 +26,7 @@ namespace Vertex.Crud.Test.Biz.Actors
     public sealed class Account : CrudGrain<long, AccountSnapshot, AccountEntity, AccountSnapshot, TestDbContext>,
         IAccount
     {
+        public override Expression<Func<AccountEntity, bool>> FindEntityExpression => x => x.Id == ActorId;
         public Task<decimal> GetBalance()
         {
             return Task.FromResult(this.Snapshot.Data.Balance);

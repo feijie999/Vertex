@@ -9,18 +9,18 @@
       <Authors>feijie</Authors>
       <PackageProjectUrl>https://github.com/feijie999/Vertex</PackageProjectUrl>
       <RepositoryUrl>https://github.com/feijie999/Vertex.git</RepositoryUrl>
-      <PackageVersion>1.2.2</PackageVersion>
+      <PackageVersion>1.2.3</PackageVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Vertex.Runtime" Version="1.0.55-alpha" />
+        <PackageReference Include="Vertex.Runtime" Version="1.0.39-alpha" />
     </ItemGroup>
 </Project>

@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+</PropertyGroup>
 <Sdk Name="Microsoft.Build.CentralPackageVersions" />
   <ItemGroup>
     <ProjectReference Include="..\..\Vertex.Abstractions\Vertex.Abstractions.csproj" />

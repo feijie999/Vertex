@@ -9,7 +9,7 @@
       <Authors>feijie</Authors>
       <PackageProjectUrl>https://github.com/feijie999/Vertex</PackageProjectUrl>
       <RepositoryUrl>https://github.com/feijie999/Vertex.git</RepositoryUrl>
-      <PackageVersion>1.2.3.6</PackageVersion>
+      <PackageVersion>1.2.3.7</PackageVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />
@@ -21,6 +21,6 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Vertex.Runtime" Version="1.0.78-alpha-g89e6fc50cb" />
+        <PackageReference Include="Vertex.Runtime" Version="1.0.80-alpha-g8928b29c18" />
     </ItemGroup>
 </Project>

@@ -42,81 +42,77 @@ namespace Vertex.Stream.RabbitMQ.Consumer
 
         public bool IsUnAvailable => this.Model is null || this.Model.Model.IsClosed;
 
-        public Task Run()
+        public async Task Run()
         {
-            this.Model = this.Client.PullModel();
-            if (this.isFirst)
-            {
-                this.isFirst = false;
-                this.Model.Model.ExchangeDeclare(this.Queue.Exchange, "direct", true);
-                this.Model.Model.QueueDeclare(this.Queue.Queue, true, false, false, null);
-                this.Model.Model.QueueBind(this.Queue.Queue, this.Queue.Exchange, this.Queue.RoutingKey);
-            }
-
+            await Task.Delay(100);
             ThreadPool.UnsafeQueueUserWorkItem(
                 async state =>
+            {
+                this.Model = this.Client.PullModel();
+                if (this.isFirst)
                 {
-                    var model = (ModelWrapper) state;
-                    while (!this.closed)
+                    this.isFirst = false;
+                    this.Model.Model.ExchangeDeclare(this.Queue.Exchange, "direct", true);
+                    this.Model.Model.QueueDeclare(this.Queue.Queue, true, false, false, null);
+                    this.Model.Model.QueueBind(this.Queue.Queue, this.Queue.Exchange, this.Queue.RoutingKey);
+                }
+
+                while (!this.closed)
+                {
+                    var list = new List<BytesBox>();
+                    var batchStartTime = DateTimeOffset.UtcNow;
+                    try
                     {
-                        var list = new List<BytesBox>();
-                        var batchStartTime = DateTimeOffset.UtcNow;
-                        try
+                        while (true)
                         {
-                            while (true)
+                            var whileResult = this.Model.Model.BasicGet(this.Queue.Queue, this.consumerOptions.AutoAck);
+                            if (whileResult is null)
                             {
-                                var whileResult =
-                                    model.Model.BasicGet(this.Queue.Queue, this.consumerOptions.AutoAck);
-                                if (whileResult is null)
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    list.Add(new BytesBox(whileResult.Body.ToArray(), whileResult));
-                                }
-
-                                if ((DateTimeOffset.UtcNow - batchStartTime).TotalMilliseconds >
-                                    model.Connection.Options.CunsumerMaxMillisecondsInterval ||
-                                    list.Count == model.Connection.Options.CunsumerMaxBatchSize)
-                                {
-                                    break;
-                                }
-                            }
-
-                            if (list.Any())
-                            {
-                                await this.Notice(list);
+                                break;
                             }
                             else
                             {
-                                await Task.Delay(WhileTimeoutSpan);
+                                list.Add(new BytesBox(whileResult.Body.ToArray(), whileResult));
+                            }
+
+                            if ((DateTimeOffset.UtcNow - batchStartTime).TotalMilliseconds > this.Model.Connection.Options.CunsumerMaxMillisecondsInterval ||
+                            list.Count == this.Model.Connection.Options.CunsumerMaxBatchSize)
+                            {
+                                break;
                             }
                         }
-                        catch (Exception exception)
+
+                        if (list.Any())
                         {
-                            this.Logger.LogError(exception.InnerException ?? exception,
-                                $"An error occurred in {this.Queue}");
-                            foreach (var item in list.Where(o => !o.Success))
-                            {
-                                model.Model.BasicReject(((BasicGetResult) item.Origin).DeliveryTag, true);
-                            }
+                            await this.Notice(list);
                         }
-                        finally
+                        else
                         {
-                            list = list.Where(o => o.Success).ToList();
-                            if (list.Any())
+                            await Task.Delay(WhileTimeoutSpan);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        this.Logger.LogError(exception.InnerException ?? exception, $"An error occurred in {this.Queue}");
+                        foreach (var item in list.Where(o => !o.Success))
+                        {
+                            this.Model.Model.BasicReject(((BasicGetResult)item.Origin).DeliveryTag, true);
+                        }
+                    }
+                    finally
+                    {
+                        list = list.Where(o => o.Success).ToList();
+                        if (list.Any())
+                        {
+                            var maxDeliveryTag = list.Max(o => ((BasicGetResult)o.Origin).DeliveryTag);
+                            if (maxDeliveryTag > 0)
                             {
-                                var maxDeliveryTag = list.Max(o => ((BasicGetResult) o.Origin).DeliveryTag);
-                                if (maxDeliveryTag > 0)
-                                {
-                                    model.Model.BasicAck(maxDeliveryTag, true);
-                                }
+                                this.Model.Model.BasicAck(maxDeliveryTag, true);
                             }
                         }
                     }
-                }, this.Model);
-            return Task.CompletedTask;
+                }
+            }, null);
         }
 
         private async Task Notice(List<BytesBox> list, int times = 0)
@@ -125,13 +121,11 @@ namespace Vertex.Stream.RabbitMQ.Consumer
             {
                 if (list.Count > 1)
                 {
-                    await Task.WhenAll(this.Queue.SubActorType.Select(subType =>
-                        this.streamSubHandler.EventHandler(subType, list)));
+                    await Task.WhenAll(this.Queue.SubActorType.Select(subType => this.streamSubHandler.EventHandler(subType, list)));
                 }
                 else if (list.Count == 1)
                 {
-                    await Task.WhenAll(this.Queue.SubActorType.Select(subType =>
-                        this.streamSubHandler.EventHandler(subType, list[0])));
+                    await Task.WhenAll(this.Queue.SubActorType.Select(subType => this.streamSubHandler.EventHandler(subType, list[0])));
                 }
             }
             catch

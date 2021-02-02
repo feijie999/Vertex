@@ -14,7 +14,8 @@ namespace Vertex.Stream.Common
 {
     public class StreamSubHandler : IStreamSubHandler
     {
-        private static readonly ConcurrentDictionary<Type, object> ObserverGeneratorDict = new ConcurrentDictionary<Type, object>();
+        private static readonly ConcurrentDictionary<Type, object> ObserverGeneratorDict =
+            new ConcurrentDictionary<Type, object>();
 
         private readonly IGrainFactory clusterClient;
 
@@ -32,11 +33,18 @@ namespace Vertex.Stream.Common
             {
                 switch (actorId)
                 {
-                    case long id: await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value)); break;
-                    case string id: await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value)); break;
-                    case Guid id: await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value)); break;
+                    case long id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value));
+                        break;
+                    case string id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value));
+                        break;
+                    case Guid id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<byte[]>(bytes.Value));
+                        break;
                     default: break;
                 }
+
                 bytes.Success = true;
             }
             else
@@ -68,11 +76,18 @@ namespace Vertex.Stream.Common
                 var items = kv.Select(item => item.bytes.Value).ToList();
                 switch (kv.Key)
                 {
-                    case long id: await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items)); break;
-                    case string id: await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items)); break;
-                    case Guid id: await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items)); break;
+                    case long id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items));
+                        break;
+                    case string id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items));
+                        break;
+                    case Guid id:
+                        await this.GetObserver(observerType, id).OnNext(new Immutable<List<byte[]>>(items));
+                        break;
                     default: break;
                 }
+
                 foreach (var (_, _, bytes) in kv)
                 {
                     bytes.Success = true;
@@ -88,10 +103,19 @@ namespace Vertex.Stream.Common
                 var clientParams = Expression.Parameter(clientType, "client");
                 var primaryKeyParams = Expression.Parameter(typeof(TPrimaryKey), "primaryKey");
                 var grainClassNamePrefixParams = Expression.Parameter(typeof(string), "grainClassNamePrefix");
-                var method = typeof(ClusterClientExtensions).GetMethod("GetGrain", new Type[] { clientType, typeof(TPrimaryKey), typeof(string) });
-                var body = Expression.Call(method.MakeGenericMethod(observerType), clientParams, primaryKeyParams, grainClassNamePrefixParams);
-                return Expression.Lambda<Func<IGrainFactory, TPrimaryKey, string, IStreamHandler>>(body, clientParams, primaryKeyParams, grainClassNamePrefixParams).Compile();
+                var method = typeof(ClusterClientExtensions).GetMethod("GetGrain",
+                    new Type[] {clientType, typeof(TPrimaryKey), typeof(string)});
+                var body = Expression.Call(method.MakeGenericMethod(observerType), clientParams, primaryKeyParams,
+                    grainClassNamePrefixParams);
+                return Expression
+                    .Lambda<Func<IGrainFactory, TPrimaryKey, string, IStreamHandler>>(body, clientParams,
+                        primaryKeyParams, grainClassNamePrefixParams).Compile();
             }) as Func<IGrainFactory, TPrimaryKey, string, IStreamHandler>;
+            if (func == null)
+            {
+                throw new NullReferenceException($"{observerType.FullName} not found IStreamHandler func");
+            }
+
             return func(this.clusterClient, primaryKey, null);
         }
     }

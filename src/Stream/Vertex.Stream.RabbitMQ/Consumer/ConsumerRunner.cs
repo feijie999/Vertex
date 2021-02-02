@@ -56,6 +56,7 @@ namespace Vertex.Stream.RabbitMQ.Consumer
             ThreadPool.UnsafeQueueUserWorkItem(
                 async state =>
                 {
+                    var model = (ModelWrapper) state;
                     while (!this.closed)
                     {
                         var list = new List<BytesBox>();
@@ -65,7 +66,7 @@ namespace Vertex.Stream.RabbitMQ.Consumer
                             while (true)
                             {
                                 var whileResult =
-                                    this.Model.Model.BasicGet(this.Queue.Queue, this.consumerOptions.AutoAck);
+                                    model.Model.BasicGet(this.Queue.Queue, this.consumerOptions.AutoAck);
                                 if (whileResult is null)
                                 {
                                     break;
@@ -76,8 +77,8 @@ namespace Vertex.Stream.RabbitMQ.Consumer
                                 }
 
                                 if ((DateTimeOffset.UtcNow - batchStartTime).TotalMilliseconds >
-                                    this.Model.Connection.Options.CunsumerMaxMillisecondsInterval ||
-                                    list.Count == this.Model.Connection.Options.CunsumerMaxBatchSize)
+                                    model.Connection.Options.CunsumerMaxMillisecondsInterval ||
+                                    list.Count == model.Connection.Options.CunsumerMaxBatchSize)
                                 {
                                     break;
                                 }
@@ -98,7 +99,7 @@ namespace Vertex.Stream.RabbitMQ.Consumer
                                 $"An error occurred in {this.Queue}");
                             foreach (var item in list.Where(o => !o.Success))
                             {
-                                this.Model.Model.BasicReject(((BasicGetResult) item.Origin).DeliveryTag, true);
+                                model.Model.BasicReject(((BasicGetResult) item.Origin).DeliveryTag, true);
                             }
                         }
                         finally
@@ -109,12 +110,12 @@ namespace Vertex.Stream.RabbitMQ.Consumer
                                 var maxDeliveryTag = list.Max(o => ((BasicGetResult) o.Origin).DeliveryTag);
                                 if (maxDeliveryTag > 0)
                                 {
-                                    this.Model.Model.BasicAck(maxDeliveryTag, true);
+                                    model.Model.BasicAck(maxDeliveryTag, true);
                                 }
                             }
                         }
                     }
-                }, null);
+                }, this.Model);
             return Task.CompletedTask;
         }
 

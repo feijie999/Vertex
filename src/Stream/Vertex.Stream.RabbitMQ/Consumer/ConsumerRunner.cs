@@ -42,21 +42,20 @@ namespace Vertex.Stream.RabbitMQ.Consumer
 
         public bool IsUnAvailable => this.Model is null || this.Model.Model.IsClosed;
 
-        public async Task Run()
+        public Task Run()
         {
-            await Task.Delay(100);
+            this.Model = this.Client.PullModel();
+            if (this.isFirst)
+            {
+                this.isFirst = false;
+                this.Model.Model.ExchangeDeclare(this.Queue.Exchange, "direct", true);
+                this.Model.Model.QueueDeclare(this.Queue.Queue, true, false, false, null);
+                this.Model.Model.QueueBind(this.Queue.Queue, this.Queue.Exchange, this.Queue.RoutingKey);
+            }
+
             ThreadPool.UnsafeQueueUserWorkItem(
                 async state =>
                 {
-                    this.Model = this.Client.PullModel();
-                    if (this.isFirst)
-                    {
-                        this.isFirst = false;
-                        this.Model.Model.ExchangeDeclare(this.Queue.Exchange, "direct", true);
-                        this.Model.Model.QueueDeclare(this.Queue.Queue, true, false, false, null);
-                        this.Model.Model.QueueBind(this.Queue.Queue, this.Queue.Exchange, this.Queue.RoutingKey);
-                    }
-
                     while (!this.closed)
                     {
                         var list = new List<BytesBox>();
@@ -132,6 +131,7 @@ namespace Vertex.Stream.RabbitMQ.Consumer
                         }
                     }
                 }, null);
+            return Task.CompletedTask;
         }
 
         private async Task Notice(List<BytesBox> list, int times = 0)

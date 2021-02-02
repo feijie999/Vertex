@@ -89,13 +89,13 @@ namespace Transfer.Server
                         };
                     }, new EventArchivePolicy("month", (name, time) => $"Vertex_Archive_{name}_{DateTimeOffset.FromUnixTimeSeconds(time).ToString("yyyyMM")}".ToLower(), table => table.StartsWith("Vertex_Archive".ToLower())));
 
-                    // serviceCollection.AddRabbitMQStream(options =>
-                    // {
-                    //    options.VirtualHost = "/";
-                    //    options.Hosts = new string[] { "localhost:5672" };
-                    //    options.UserName = "guest";
-                    //    options.Password = "guest";
-                    // });
+                    serviceCollection.AddRabbitMQStream(options =>
+                    {
+                       options.VirtualHost = "/";
+                       options.Hosts = new string[] { "localhost:5672" };
+                       options.UserName = "guest";
+                       options.Password = "guest";
+                    });
                     // serviceCollection.AddKafkaStream(
                     // config => { },
                     // config =>

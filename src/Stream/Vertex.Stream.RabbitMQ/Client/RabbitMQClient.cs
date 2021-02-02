@@ -19,7 +19,7 @@ namespace Vertex.Stream.RabbitMQ.Client
                 UserName = this.options.UserName,
                 Password = this.options.Password,
                 VirtualHost = this.options.VirtualHost,
-                AutomaticRecoveryEnabled = false
+                AutomaticRecoveryEnabled = true
             };
             this.pool = new DefaultObjectPool<ModelWrapper>(new PooledModelPolicy(this.connectionFactory, this.options));
         }

@@ -610,7 +610,10 @@ namespace Vertex.Runtime.Actor
 
                 if (eventUnit.Meta.Version > this.Snapshot.Version)
                 {
-                    throw new EventVersionException(this.ActorId.ToString(), this.ActorType, eventUnit.Meta.Version, this.Snapshot.Version);
+                    this.Logger.LogWarning($"eventUnit.Meta.Version > Snapshot.Version:ActorId=>{this.ActorId.ToString()},ActorType=>{this.ActorType.FullName},eventUnit.Meta.Version=>{eventUnit.Meta.Version},Snapshot.Version=>{this.Snapshot.Version}");
+                    await this.SaveSnapshotAsync(isError: true);
+                    return;
+                    // throw new EventVersionException(this.ActorId.ToString(), this.ActorType, eventUnit.Meta.Version, this.Snapshot.Version);
                 }
 
                 await this.SaveSnapshotAsync();

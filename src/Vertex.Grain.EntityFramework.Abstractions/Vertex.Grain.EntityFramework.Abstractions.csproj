@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <PackageVersion>1.2.3.11</PackageVersion>
+        <PackageVersion>1.2.3.12</PackageVersion>
     </PropertyGroup>
     <PropertyGroup>
       <Authors>feijie</Authors>
@@ -19,6 +19,6 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Vertex.Abstractions" Version="1.0.84-alpha-g5447736855" />
+      <PackageReference Include="Vertex.Abstractions" Version="1.0.85-alpha-g72541d7642" />
     </ItemGroup>
 </Project>

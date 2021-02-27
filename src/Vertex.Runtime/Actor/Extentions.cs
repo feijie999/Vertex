@@ -66,11 +66,19 @@ namespace Vertex.Runtime.Actor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IncrementDoingVersion<TPrimaryKey>(this SubSnapshot<TPrimaryKey> state, Type grainType)
         {
-            if (state.DoingVersion != state.Version)
-            {
-                throw new SnapshotException(state.ActorId.ToString(), grainType, state.DoingVersion, state.Version);
-            }
+            // if (state.DoingVersion != state.Version)
+            // {
+            //     throw new SnapshotException(state.ActorId.ToString(), grainType, state.DoingVersion, state.Version);
+            // }
 
+            if (state.DoingVersion < state.Version)
+            {
+                state.DoingVersion = state.Version;
+            }
+            else
+            {
+                return;
+            }
             state.DoingVersion++;
         }
 

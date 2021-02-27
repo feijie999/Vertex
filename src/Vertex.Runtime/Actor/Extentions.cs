@@ -77,12 +77,15 @@ namespace Vertex.Runtime.Actor
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void UpdateVersion<TPrimaryKey>(this SubSnapshot<TPrimaryKey> snapshot, EventMeta eventBase, Type grainType)
         {
-            if (snapshot.Version + 1 != eventBase.Version)
-            {
-                throw new EventVersionException(snapshot.ActorId.ToString(), grainType, eventBase.Version, snapshot.Version);
-            }
+            // if (snapshot.Version + 1 != eventBase.Version)
+            // {
+            //     throw new EventVersionException(snapshot.ActorId.ToString(), grainType, eventBase.Version, snapshot.Version);
+            // }
 
-            snapshot.Version = eventBase.Version;
+            if (eventBase.Version > snapshot.Version)
+            {
+                snapshot.Version = eventBase.Version;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

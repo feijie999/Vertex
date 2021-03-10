@@ -9,7 +9,7 @@
       <Authors>feijie</Authors>
       <PackageProjectUrl>https://github.com/feijie999/Vertex</PackageProjectUrl>
       <RepositoryUrl>https://github.com/feijie999/Vertex.git</RepositoryUrl>
-      <PackageVersion>1.2.4.4</PackageVersion>
+      <PackageVersion>1.2.4.5</PackageVersion>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Vertex.Grain.EntityFramework.Abstractions\Vertex.Grain.EntityFramework.Abstractions.csproj" />

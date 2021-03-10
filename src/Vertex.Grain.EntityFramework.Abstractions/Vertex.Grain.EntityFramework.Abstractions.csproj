@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <PackageVersion>1.2.4.4</PackageVersion>
+        <PackageVersion>1.2.4.5</PackageVersion>
     </PropertyGroup>
     <PropertyGroup>
       <Authors>feijie</Authors>
